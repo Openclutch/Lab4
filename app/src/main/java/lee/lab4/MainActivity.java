@@ -39,11 +39,12 @@ public class MainActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
+
             TextView text = new TextView(context);
 
             // TODO
             text.setText(data.get(position));
-            text.setTextSize(40);
+            text.setTextSize(30);
             return text;
         }
 
@@ -89,6 +90,6 @@ public class MainActivity extends Activity {
         EditText message = (EditText) findViewById(R.id.editText);
         this.messages.add(message.getText().toString());
         adapter.notifyDataSetChanged();
-        message.clearComposingText();
+        message.setText("");
     }
 }
