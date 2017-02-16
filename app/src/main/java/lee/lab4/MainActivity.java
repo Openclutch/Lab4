@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -11,6 +12,8 @@ import android.widget.Adapter;
 import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -39,13 +42,45 @@ public class MainActivity extends Activity {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-
+            // Create the objects needed
             TextView text = new TextView(context);
+            ImageView img = new ImageView(context);
+            LinearLayout layout = new LinearLayout(context);
 
-            // TODO
+            // Layout settings
+            layout.setOrientation(LinearLayout.HORIZONTAL);
+
+            // Set the text box
             text.setText(data.get(position));
             text.setTextSize(30);
-            return text;
+
+            LinearLayout.LayoutParams imgSettings = new LinearLayout.LayoutParams(
+                    LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+            imgSettings.gravity = Gravity.BOTTOM;
+            img.setLayoutParams(imgSettings);
+
+            // Check if position is odd or even
+            // Set pic and positioning accordingly
+            if ((position % 2) == 0) {
+                img.setImageDrawable(outgoing);
+                layout.addView(img);
+                layout.addView(text);
+            } else {
+                img.setImageDrawable(incoming);
+                // Format text for right align
+                text.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_END);
+                text.setTextAlignment(TextView.TEXT_ALIGNMENT_TEXT_END);
+                LinearLayout.LayoutParams textSettings = new LinearLayout.LayoutParams(
+                        LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT);
+                textSettings.weight = 1;
+                text.setLayoutParams(textSettings);
+
+                layout.addView(text);
+                layout.addView(img);
+            }
+
+            return layout;
         }
 
         @Override
