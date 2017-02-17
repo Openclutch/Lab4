@@ -2,9 +2,11 @@ package lee.lab4;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -108,17 +110,20 @@ public class MainActivity extends Activity {
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         // Initialize Model
-        this.messages = new ArrayList<String>();
+        if (savedInstanceState == null) {
+            // Create new messages object if nothing is saved
+            this.messages = new ArrayList<String>();
+        } else {
+            // Restore state members from saved instance
+            this.messages = savedInstanceState.getStringArrayList("msg");
+        }
 
-        // Let the Adapter know about the Model, and the ListView about the Adapter.
+        // Let the Adapter know about the Model, and the ListView about the Adapter
         this.adapter = new MyAdapter(this, messages);
 
         ListView listView = (ListView) findViewById(R.id.listView); // Get list from layout
-
-        listView.setAdapter(this.adapter); // where listView is the ListView in your layout.
-
+        listView.setAdapter(this.adapter); // where listView is the ListView in your layout
         listView.setTranscriptMode(ListView.TRANSCRIPT_MODE_ALWAYS_SCROLL); // Auto scroll
-
     }
 
     public void onSend(View view) {
@@ -126,5 +131,13 @@ public class MainActivity extends Activity {
         this.messages.add(message.getText().toString());
         adapter.notifyDataSetChanged();
         message.setText("");
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        savedInstanceState.putStringArrayList("msg", this.messages);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
     }
 }
