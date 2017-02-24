@@ -109,6 +109,8 @@ public class MainActivity extends Activity {
         // Disable pop up keyboard
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
+        /*
+        // Commenting out for Lab5
         // Initialize Model
         if (savedInstanceState == null) {
             // Create new messages object if nothing is saved
@@ -117,6 +119,7 @@ public class MainActivity extends Activity {
             // Restore state members from saved instance
             this.messages = savedInstanceState.getStringArrayList("msg");
         }
+        */
 
         // Let the Adapter know about the Model, and the ListView about the Adapter
         this.adapter = new MyAdapter(this, messages);
@@ -133,6 +136,8 @@ public class MainActivity extends Activity {
         message.setText("");
     }
 
+    /*
+    // Commenting out for Lab5
     @Override
     public void onSaveInstanceState(Bundle savedInstanceState) {
         savedInstanceState.putStringArrayList("msg", this.messages);
@@ -140,4 +145,5 @@ public class MainActivity extends Activity {
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
+    */
 }
