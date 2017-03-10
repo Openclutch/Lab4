@@ -3,8 +3,11 @@ package lee.lab4;
 import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,7 @@ public class MainActivity extends Activity {
 
     private ArrayList<String> messages;
     private MyAdapter adapter;
+    public SQLiteDatabase db;
 
     private static class MyAdapter extends BaseAdapter {
         private Context context;
@@ -106,8 +110,25 @@ public class MainActivity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        SQLite helper = new SQLite(getApplicationContext());
+        this.db = helper.getWritableDatabase();
+
         // Disable pop up keyboard
         this.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+
+        this.messages = new ArrayList<String>();
+
+        Log.i("cursor", "Starting the cursor");
+
+        // Initialize new model here with sqlite
+        Cursor cursor = db.rawQuery("SELECT message FROM DBMessages", null);
+        while(cursor.moveToNext()) {
+            Log.i("cursor", "in the loop");
+            Log.i("cursor", cursor.getString(cursor.getColumnIndex("message")));
+            this.messages.add(cursor.getString(cursor.getColumnIndex("message")));
+        }
+
+        Log.i("cursor", "Ending the cursor");
 
         /*
         // Commenting out for Lab5
@@ -132,6 +153,9 @@ public class MainActivity extends Activity {
     public void onSend(View view) {
         EditText message = (EditText) findViewById(R.id.editText);
         this.messages.add(message.getText().toString());
+        String insertQuery = "insert into DBMessages (message) values ('" + message.getText().toString() + "');";
+        Log.i("insert", insertQuery);
+        db.execSQL(insertQuery);
         adapter.notifyDataSetChanged();
         message.setText("");
     }
